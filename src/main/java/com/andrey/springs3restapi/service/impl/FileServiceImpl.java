@@ -17,9 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.util.Collections;
 import java.util.List;
@@ -45,36 +43,22 @@ public class FileServiceImpl implements FileService {
         if (!s3Client.doesBucketExistV2(bucketName)) {
             s3Client.createBucket(new CreateBucketRequest(bucketName));
         }
-
-        try {
-            File file = convertMultiPartFileToFile(multipartFile);
-            String contentType = multipartFile.getContentType();
-
-            MyFile myFile = writeDataToDataBase(user, file, bucketName);
-            if (myFile == null) {
-                return;
-            }
-            upload(bucketName, file, contentType);
-        } catch (IOException e) {
-            e.printStackTrace();
+        String contentType = multipartFile.getContentType();
+        MyFile myFile = writeDataToDataBase(user, multipartFile, bucketName);
+        if (myFile == null) {
+            return;
         }
+            upload(bucketName, multipartFile, contentType);
     }
 
-    private File convertMultiPartFileToFile(MultipartFile multipartFile) throws IOException {
-        File file = new File(multipartFile.getOriginalFilename());
-        FileOutputStream fos = new FileOutputStream(file);
-        fos.write(multipartFile.getBytes());
-        fos.close();
-        return file;
-    }
-
-    private MyFile writeDataToDataBase(User user, File file, String bucketName) {
-        String filename = file.getName().substring(0, file.getName().lastIndexOf("."));
+    private MyFile writeDataToDataBase(User user, MultipartFile multipartFile, String bucketName) {
+        String originalFileName = multipartFile.getOriginalFilename();
+        String filename = originalFileName.substring(0, originalFileName.lastIndexOf("."));
         MyFile myFile;
         if (!isExistInDataBase(filename)) {
-            myFile = createAndSetUpMyFile(user, file, bucketName);
+            myFile = createAndSetUpMyFile(user, multipartFile, bucketName);
         } else {
-            myFile = updateMyFile(user, file, bucketName, filename);
+            myFile = updateMyFile(user, multipartFile, bucketName, filename);
         }
         fileRepository.save(myFile);
         return myFile;
@@ -84,41 +68,42 @@ public class FileServiceImpl implements FileService {
         return fileRepository.findByName(filename) != null;
     }
 
-    private MyFile createAndSetUpMyFile(User user, File file, String bucketName) {
+    private MyFile createAndSetUpMyFile(User user, MultipartFile multipartFile, String bucketName) {
         MyFile myFile = null;
         try {
+            String originalFileName = multipartFile.getOriginalFilename();
+
             myFile = new MyFile();
             myFile.setStatus(Status.ACTIVE);
-            myFile.setExtension(file.getName().substring(file.getName().lastIndexOf(".") + 1));
-            myFile.setName(file.getName().substring(0,file.getName().lastIndexOf(".")));
+            myFile.setExtension(originalFileName.substring(originalFileName.lastIndexOf(".") + 1));
+            myFile.setName(originalFileName.substring(0,originalFileName.lastIndexOf(".")));
             myFile.setBucketName(bucketName);
-            myFile.setSize(Files.size(file.toPath()));
+            myFile.setSize(multipartFile.getSize());
             myFile.setUser(user);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return myFile;
     }
 
-    private MyFile updateMyFile(User user, File file, String bucketName, String filename) {
+    private MyFile updateMyFile(User user, MultipartFile multipartFile, String bucketName, String filename) {
         MyFile oldValue = fileRepository.findByName(filename);
-        MyFile newValue = createAndSetUpMyFile(user, file, bucketName);
+        MyFile newValue = createAndSetUpMyFile(user, multipartFile, bucketName);
         newValue.setId(oldValue.getId());
         return newValue;
     }
 
-    private void upload(String bucketName, File file, String contentType) {
+    private void upload(String bucketName, MultipartFile multipartFile, String contentType) {
         try {
             if (!s3Client.doesBucketExistV2(bucketName)) {
                 s3Client.createBucket(new CreateBucketRequest(bucketName));
             }
+            InputStream is = multipartFile.getInputStream();
+            String key = multipartFile.getOriginalFilename();
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType(contentType);
-
-            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, file.getName(), file);
-            putObjectRequest.setMetadata(metadata);
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, is, metadata);
             s3Client.putObject(putObjectRequest);
-
             //TODO exceptions types are implemented according to an official docs
             //https://docs.aws.amazon.com/AmazonS3/latest/userguide/upload-objects.html
         } catch (AmazonServiceException e) {
