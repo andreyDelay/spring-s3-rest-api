@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd ">
+
+    <changeSet id="1.0.1" author="andrey">
+        <sqlFile dbms="mysql"
+                 encoding="UTF-8"
+                 relativeToChangelogFile="true"
+                path="/sql-1.0/1.0-changeset.create-users-table.sql"/>
+    </changeSet>
+
+    <changeSet id="1.0.2" author="andrey">
+        <sqlFile dbms="mysql"
+                 encoding="UTF-8"
+                 relativeToChangelogFile="true"
+                 path="/sql-1.0/1.0-changeset.create-accounts-table.sql"/>
+    </changeSet>
+
+    <changeSet id="1.0.3" author="andrey">
+        <sqlFile dbms="mysql"
+                 encoding="UTF-8"
+                 relativeToChangelogFile="true"
+                 path="/sql-1.0/1.0-changeset.create-events-table.sql"/>
+    </changeSet>
+
+    <changeSet id="1.0.4" author="andrey">
+        <sqlFile dbms="mysql"
+                 encoding="UTF-8"
+                 relativeToChangelogFile="true"
+                 path="/sql-1.0/1.0-changeset.create-files-table.sql"/>
+    </changeSet>
+
+    <changeSet id="1.0.5" author="andrey">
+        <sqlFile dbms="mysql"
+                 encoding="UTF-8"
+                 relativeToChangelogFile="true"
+                 path="/sql-1.0/1.0-changeset.create-roles-table.sql"/>
+    </changeSet>
+
+    <changeSet id="1.0.6" author="andrey">
+        <sqlFile dbms="mysql"
+                 encoding="UTF-8"
+                 relativeToChangelogFile="true"
+                 path="/sql-1.0/1.0-changeset.create-user-roles-table.sql"/>
+    </changeSet>
+</databaseChangeLog>

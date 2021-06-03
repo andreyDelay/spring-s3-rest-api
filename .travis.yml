@@ -1,0 +1,10 @@
+language: java
+jdk: -oraclejdk15
+sudo: false
+
+nitifications:
+  email:
+    recipients:
+      - frowzygleb@gmail.com
+    on_success: never
+    on_failure: always
