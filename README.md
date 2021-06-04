@@ -22,36 +22,39 @@ ___
 
 Сущности:
 
->    User
-    Account
-    AccountStatus
-    Event
-    File
-    FileStatus (enum ACTIVE, BANNED, DELETED)
-    User -> List<File> files + List<Events> + Account account
+> - User
+> - Account
+> - AccountStatus
+> - Event
+> - File
+> - FileStatus (enum ACTIVE, BANNED, DELETED)
+> - User -> List<File> files + List<Events> + Account account
 
 Взаимодействие с S3 должно быть реализовано с помощью AWS SDK.
     
 Уровни доступа:
 
->    ADMIN - полный доступ к приложению
-    MODERATOR - добавление и удаление файлов
-    USER - только чтение всех данных кроме User + Account
+> - ADMIN - полный доступ к приложению
+> - MODERATOR - добавление и удаление файлов
+> - USER - только чтение всех данных кроме User + Account
 
 Технологии: 
->Java, 
-MySQL, 
-Spring (IoC, Data, Sercurity), 
-AWS SDK, 
-MySQL, 
-Travis, 
-Docker, 
-JUnit, 
-Mockito, 
-Gradle.
+> - Java, 
+> - MySQL, 
+> - Spring (IoC, Data, Sercurity), 
+> - AWS SDK, 
+> - MySQL, 
+> - Travis, 
+> - Docker, 
+> - JUnit, 
+> - Mockito, 
+> - Gradle.
 
 ---
+
 ####To start the application properly you have to follow next steps:
+
+
 >  - clone the project
 >  - create mysql database with name s3_rest or simply change the values in the [application.properties](/src/main/resources/application.properties)
 >  - you also should have your own AWS s3 credentials and then change 2 keys in the file [AwsCredentials.properties](/src/main/resources/AwsCredentials.properties)
@@ -61,6 +64,8 @@ Gradle.
 ___
 
 ###There are some points you should deal with to get a predictable result of application execution.
+
+
 <br/>
 
 **Postman environment**.  <br/>
@@ -71,6 +76,7 @@ Also, the collection can give you impression of how many requests api can handle
  - [s3 environment](https://drive.google.com/uc?export=download&id=1gowSbcTaG5JBpRbVVdrV6jXFdspzNlEg)
  - [collection of requests](https://drive.google.com/uc?export=download&id=12s3fj4HXkZRoy_maYI-dS9NGEqnOQoAR)
 ___
+
 
 ####End points of the API  
 
@@ -135,11 +141,15 @@ GET     |    /api/v1/users/me/events    |    returns event by id for logged in U
 ___
 ___
 
+
 ###JSON examples
 
 ___
 
+
  1. ####Valid JSON object for sing up 
+
+
 ```JSON
 {  
     "username":"Your username",  
@@ -150,14 +160,21 @@ ___
     "login":"yourLogin"  
 }
 ```
+
+
  2. ####Sing in JSON object example
+
+
 ```JSON
     {
     "username":"{{admin}}",
     "password":"{{admin_password}}"
     }
 ```
+
+
  3. ####Restore account body request example
+
 
 (*not work as expected, better not to user for now*)
 ```JSON
@@ -167,7 +184,10 @@ ___
 }
 ```
 
+
 4. ####Пример ответа для роли ADMIN
+
+
 ```JSON
 {
     "id": 2,  
