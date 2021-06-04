@@ -52,7 +52,7 @@ ___
 
 ---
 
-####To start the application properly you have to follow next steps:
+#### To start the application properly you have to follow next steps:
 
 
 >  - clone the project
@@ -63,7 +63,7 @@ ___
 
 ___
 
-###There are some points you should deal with to get a predictable result of application execution.
+### There are some points you should deal with to get a predictable result of application execution.
 
 
 <br/>
@@ -78,7 +78,7 @@ Also, the collection can give you impression of how many requests api can handle
 ___
 
 
-####End points of the API  
+#### End points of the API  
 
 - Authentication
 
@@ -142,12 +142,12 @@ ___
 ___
 
 
-###JSON examples
+### JSON examples
 
 ___
 
 
- 1. ####Valid JSON object for sing up 
+ 1. #### Valid JSON object for sing up 
 
 
 ```JSON
@@ -162,7 +162,7 @@ ___
 ```
 
 
- 2. ####Sing in JSON object example
+ 2. #### Sing in JSON object example
 
 
 ```JSON
@@ -173,7 +173,7 @@ ___
 ```
 
 
- 3. ####Restore account body request example
+ 3. #### Restore account body request example
 
 
 (*not work as expected, better not to user for now*)
@@ -185,7 +185,7 @@ ___
 ```
 
 
-4. ####Пример ответа для роли ADMIN
+4. #### Пример ответа для роли ADMIN
 
 
 ```JSON
